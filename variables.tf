@@ -10,19 +10,29 @@ variable "assume_role_str" {
   nullable    = true
   default     = ""
 }
+variable "vpc_id" {
+  description = "AWS VPC id"
+  type        = string
+  nullable    = true
+  default     = "vpc-060240292d675c06e"
+}
+variable "vpc_public_subnets_name_prefix" {
+  type    = string
+  default = "upstream_vpc-public"
+}
 
 variable "custom_domain" {
-  type        = string
-  default     = "kubesources.com"
+  type    = string
+  default = "kubesources.com"
 }
 
 variable "route53_zone_id" {
-  type        = string
-  default     = "Z02763451I8QENECRLHM9"
+  type    = string
+  default = "Z02763451I8QENECRLHM9"
 }
 
 variable "addition_tags" {
-  type    = map
+  type    = map(any)
   default = {}
 }
 # variable "tags" {
@@ -53,8 +63,8 @@ variable "addition_tags" {
 # }
 
 variable "public_subnet_ids" {
-  type        = list
-  default     = []
+  type    = list(any)
+  default = []
 }
 
 variable "create" {
@@ -100,51 +110,99 @@ variable "cluster_name" {
 
 
 variable "create_argocd" {
-  type        = bool
-  default     = false
+  type    = bool
+  default = false
 }
 
 ################################################################################
 # Helm Charts Parameters
 ################################################################################
+
+##########################################################
+### AWS ELB Controller
+################################################################################
+
+variable "create_aws_elb_controller" {
+  type    = bool
+  default = false
+}
+
+variable "helm_release_aws_elb_controller_parameter" {
+  type    = map(any)
+  default = {}
+}
+
+################################################################################
+### External Secrets
+################################################################################
+
+variable "create_external_secrets" {
+  type    = bool
+  default = false
+}
+
+variable "helm_release_external_secrets_parameter" {
+  type    = map(any)
+  default = {}
+}
+
+################################################################################
+### Velero
+################################################################################
+
+variable "create_velero_controller" {
+  type    = bool
+  default = false
+}
+
+variable "helm_release_velero_parameter" {
+  type    = map(any)
+  default = {}
+}
+
+################################################################################
+### Metrics Server
+################################################################################
+
+variable "create_metrics_server_controller" {
+  type    = bool
+  default = false
+}
+variable "create_metrics_server_controller_namespace" {
+  type    = bool
+  default = true
+}
+variable "helm_release_metrics_server_controller_parameter" {
+  type = map(any)
+  default = {
+    helm_repo_namespace = ""
+    helm_repo_url       = ""
+    helm_repo_name      = ""
+    helm_repo_crd       = ""
+    helm_repo_timeout   = 4000
+    helm_repo_version   = ""
+  }
+}
+
+
+
+
+
+
+################################################################################
 ### ArgoCD
 ################################################################################
 
-# variable "helm_release_aws_elb_controller" {
-#   type = map(object({
-#     helm_repo_namespace = string
-#     helm_repo_url       = string
-#     helm_repo_name      = string
-#     helm_repo_version   = string
-#     helm_repo_crd       = any
-#   }))
-#   default = {
-#     helm_repo_namespace = "nginx"
-#     helm_repo_url       = "https://aws.github.io/eks-charts"
-#     helm_repo_name      = "aws-load-balancer-controller"
-#     helm_repo_version   = "1.13.0"
-#     helm_repo_crd       = null
-#     helm_set_parameters = [
-#       {
-#         name  = ""
-#         value = ""
-#       }
-#     ]
-#   }
-# }
-
-
-
-
-
-
-
-
-
-variable "helm_release_argocd_helm_chart_version" {
-  type        = string
-  default     = "7.9.0"
+variable "create_argocd_controller" {
+  type    = bool
+  default = false
 }
+
+variable "helm_release_argocd_controller_parameter" {
+  type    = map(any)
+  default = {}
+}
+
 
 # variable "argocd_keycloak_client_issuer" {
 #   description = "keycloak issuer of argocd"
@@ -156,113 +214,8 @@ variable "helm_release_argocd_helm_chart_version" {
 #   type        = string
 #   default     = ""
 # }
-variable "argocd_endpoint" {
-  description = "endpoint of argocd"
-  type        = string
-  default     = ""
-}
-variable "create_argocd_cert" {
-  type        = bool
-  default     = true
-}
-variable "create_wildcard_argocd_cert" {
-  type        = bool
-  default     = true
-}
-variable "argocd_waf_arn" {
-  type        = string
-  default     = ""
-}
 
-variable "custom_argocd_subdomain" {
-  type        = string
-  default     = "argocd"
-}
 
-################################################################################
-### AWS ELB Controller
-################################################################################
 
-variable "create_aws_elb_controller" {
-  type        = bool
-  default     = false
-}
 
-variable "helm_release_aws_elb_controller_parameter" {
-  type        = map
-  default     = {}
-}
-
-# variable "helm_release_aws_elb_controller_set_parameter" {
-#   type = list(object({
-#     name  = string
-#     value = string
-#   }))
-#   default = []
-# }
-
-################################################################################
-### AWS ALB Ingress
-################################################################################
-
-variable "create_aws_alb_ingress" {
-  type        = bool
-  default     = false
-}
-
-variable "aws_alb_ingress_parameter" {
-  type        = map
-  default     = {}
-}
-
-################################################################################
-### External Secrets
-################################################################################
-
-variable "create_external_secrets" {
-  type        = bool
-  default     = false
-}
-
-variable "helm_release_external_secrets_parameter" {
-  type        = map
-  default     = {}
-}
-
-################################################################################
-### Velero
-################################################################################
-
-variable "create_velero_controller" {
-  type        = bool
-  default     = false
-}
-
-variable "helm_release_velero_parameter" {
-  type        = map
-  default     = {}
-}
-
-################################################################################
-### Metrics Server
-################################################################################
-
-variable "create_metrics_server_controller" {
-  type        = bool
-  default     = false
-}
-variable "create_metrics_server_controller_namespace" {
-  type        = bool
-  default     = true
-}
-variable "helm_release_metrics_server_controller_parameter" {
-  type        = map
-  default     = {
-    helm_repo_namespace = ""
-    helm_repo_url = ""
-    helm_repo_name = ""
-    helm_repo_crd = ""
-    helm_repo_timeout = 4000
-    helm_repo_version = ""
-  }
-}
+######################
