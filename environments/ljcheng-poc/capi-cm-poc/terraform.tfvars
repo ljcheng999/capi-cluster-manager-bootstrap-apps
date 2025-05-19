@@ -5,7 +5,7 @@ create          = true
 cluster_name    = "capi-cm-poc"
 route53_zone_id = "Z02548442OA65RYWCE62R"
 custom_domain   = "kubesources.com"
-vpc_id          = "vpc-060240292d675c06e"
+vpc_id          = "vpc-0b23e10da710344b8"
 
 ### External Secrets
 create_external_secrets = true
@@ -49,24 +49,26 @@ helm_release_velero_parameter = {
 ### ArgoCD
 create_argocd_controller = true
 helm_release_argocd_controller_parameter = {
-  helm_repo_name                                  = "argocd"
-  helm_repo_version                               = "8.0.0"
-  helm_repo_create_argocd_cert                    = true
-  helm_repo_create_wildcard_argocd_cert           = true
-  helm_repo_ingressclassname                      = "alb"
-  helm_repo_custom_argocd_subdomain               = "ljcheng"
-  aws_argocd_alb_ingress_create                   = true
+  helm_repo_name                        = "argocd"
+  helm_repo_version                     = "8.0.0"
+  helm_repo_create_argocd_cert          = true
+  helm_repo_create_wildcard_argocd_cert = true
+  helm_repo_ingressclassname            = "argocd"
+  helm_repo_custom_argocd_subdomain     = "ljcheng"
+
+  aws_argocd_alb_ingress_create    = true
+  aws_argocd_alb_ingress_namespace = "nginx"
+  aws_argocd_alb_ingress_classname = "alb"
+
   aws_argocd_alb_ingress_certificate_arn          = ""
   aws_argocd_alb_ingress_load_balancer_attributes = "idle_timeout.timeout_seconds=600"
   aws_argocd_alb_ingress_scheme                   = "internet-facing"
   aws_argocd_alb_ingress_target_type              = "instance"
-  aws_argocd_alb_ingress_namespace                = "nginx"
-  aws_argocd_alb_ingress_classname                = "alb"
 }
 
-
-
-
-
-
-
+create_argocd_ingress_nginx_controller = true
+helm_release_argocd_ingress_nginx_parameter = {
+  helm_repo_name      = "ingress-nginx"
+  helm_repo_version   = "4.12.2"
+  helm_repo_namespace = "argocd"
+}

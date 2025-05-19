@@ -203,6 +203,15 @@ variable "helm_release_argocd_controller_parameter" {
   default = {}
 }
 
+variable "create_argocd_ingress_nginx_controller" {
+  type    = bool
+  default = false
+}
+variable "helm_release_argocd_ingress_nginx_parameter" {
+  type    = map(any)
+  default = {}
+}
+
 
 # variable "argocd_keycloak_client_issuer" {
 #   description = "keycloak issuer of argocd"

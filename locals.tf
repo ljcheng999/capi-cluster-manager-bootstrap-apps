@@ -11,11 +11,11 @@ locals {
   addition_tags = var.addition_tags
 
 
-  create            = var.create
-  cluster_name      = var.cluster_name
-  route53_zone_id   = var.route53_zone_id
-  custom_domain     = var.custom_domain
-  public_subnet_ids = var.public_subnet_ids
+  create          = var.create
+  cluster_name    = var.cluster_name
+  route53_zone_id = var.route53_zone_id
+  custom_domain   = var.custom_domain
+  # public_subnet_ids = var.public_subnet_ids
 
   ### AWS ELB
   create_aws_elb_controller                 = var.create_aws_elb_controller
@@ -35,8 +35,10 @@ locals {
 
 
   ### ArgoCD
-  create_argocd_controller                 = var.create_argocd_controller
-  helm_release_argocd_controller_parameter = var.helm_release_argocd_controller_parameter
+  create_argocd_controller                    = var.create_argocd_controller
+  helm_release_argocd_controller_parameter    = var.helm_release_argocd_controller_parameter
+  create_argocd_ingress_nginx_controller      = var.create_argocd_ingress_nginx_controller
+  helm_release_argocd_ingress_nginx_parameter = var.helm_release_argocd_ingress_nginx_parameter
   # argocd_endpoint                          = "${var.cluster_name}.${var.custom_argocd_subdomain}.${var.custom_domain}"
 
 

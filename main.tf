@@ -12,11 +12,11 @@ module "capi_cluster_manager_bootstrap_app" {
   # source  = "ljcheng999/capi-cluster-manager-bootstrap-apps/aws"
   # version = "1.0.1"
 
-  create                         = local.create
-  cluster_name                   = local.cluster_name
-  vpc_id                         = var.vpc_id
-  route53_zone_id                = local.route53_zone_id
-  public_subnet_ids              = local.public_subnet_ids
+  create          = local.create
+  cluster_name    = local.cluster_name
+  vpc_id          = var.vpc_id
+  route53_zone_id = local.route53_zone_id
+  # public_subnet_ids              = local.public_subnet_ids
   custom_domain                  = local.custom_domain
   vpc_public_subnets_name_prefix = var.vpc_public_subnets_name_prefix
 
@@ -37,8 +37,10 @@ module "capi_cluster_manager_bootstrap_app" {
   helm_release_metrics_server_controller_parameter = local.helm_release_metrics_server_controller_parameter
 
   ### ArgoCD
-  create_argocd_controller                 = local.create_argocd_controller
-  helm_release_argocd_controller_parameter = local.helm_release_argocd_controller_parameter
+  create_argocd_controller                    = local.create_argocd_controller
+  helm_release_argocd_controller_parameter    = local.helm_release_argocd_controller_parameter
+  create_argocd_ingress_nginx_controller      = local.create_argocd_ingress_nginx_controller
+  helm_release_argocd_ingress_nginx_parameter = local.helm_release_argocd_ingress_nginx_parameter
 
 
 
@@ -60,10 +62,10 @@ module "capi_cluster_manager_bootstrap_app" {
 }
 
 
-output "resources" {
-  value = module.capi_cluster_manager_bootstrap_app
-  # sensitive = true
-}
+# output "capi_cluster_manager_bootstrap_app" {
+#   value     = module.capi_cluster_manager_bootstrap_app
+#   sensitive = true
+# }
 
 
 
