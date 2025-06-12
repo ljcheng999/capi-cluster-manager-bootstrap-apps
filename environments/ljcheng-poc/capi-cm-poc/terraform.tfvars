@@ -1,43 +1,40 @@
 
 addition_tags = {}
 
-create          = true
-cluster_name    = "capi-cm-poc"
-route53_zone_id = "Z02548442OA65RYWCE62R"
-custom_domain   = "kubesources.com"
-vpc_id          = "vpc-0b23e10da710344b8"
+create                         = true
+cluster_name                   = "capi-cm-poc"
+custom_domain                  = "kubesources.com"
+vpc_prefix                     = "upstream"
+vpc_public_subnets_name_prefix = "upstream_vpc-public"
 
-### External Secrets
-create_external_secrets = true
-helm_release_external_secrets_parameter = {
-  helm_repo_name    = "external-secrets"
-  helm_repo_version = "0.16.2"
-}
 
 ### AWS ELB
-create_aws_elb_controller = true
+create_aws_elb_controller = false
 helm_release_aws_elb_controller_parameter = {
-  helm_repo_name      = "aws-load-balancer-controller"
-  helm_repo_version   = "1.13.0"
+  helm_repo_chart     = "aws-load-balancer-controller"
+  helm_repo_version   = "1.13.2"
   helm_repo_namespace = "nginx"
 }
 
-### AWS Velero
-create_metrics_server_controller = true
+### External Secrets
+create_external_secrets = false
+helm_release_external_secrets_parameter = {
+  helm_repo_chart   = "external-secrets"
+  helm_repo_version = "0.16.2"
+}
+
+### Metrics SErvice
+create_metrics_server_controller = false
 helm_release_metrics_server_controller_parameter = {
-  helm_repo_name    = "metrics-server"
+  helm_repo_chart   = "metrics-server"
   helm_repo_version = "3.12.2"
 }
 
 ### Velero
-create_velero_controller = false
+create_velero_controller = true
 helm_release_velero_parameter = {
   helm_repo_chart          = "velero"
-  helm_repo_namespace      = "velero"
-  helm_repo_url            = "https://vmware-tanzu.github.io/helm-charts"
-  helm_repo_name           = "velero"
-  helm_repo_crd            = null
-  helm_repo_version        = "9.1.0"
+  helm_repo_version        = "10.0.1"
   cloud_provider           = "aws"
   cloud_bucket             = "velero-ljcheng-cluster-backups"
   cloud_bucket_folder_name = "core-kubesources-cluster-backups"
@@ -46,29 +43,38 @@ helm_release_velero_parameter = {
 }
 
 
-### ArgoCD
-create_argocd_controller = true
-helm_release_argocd_controller_parameter = {
-  helm_repo_name                        = "argocd"
-  helm_repo_version                     = "8.0.0"
-  helm_repo_create_argocd_cert          = true
-  helm_repo_create_wildcard_argocd_cert = true
-  helm_repo_ingressclassname            = "argocd"
-  helm_repo_custom_argocd_subdomain     = "ljcheng"
-
-  aws_argocd_alb_ingress_create    = true
-  aws_argocd_alb_ingress_namespace = "nginx"
-  aws_argocd_alb_ingress_classname = "alb"
-
-  aws_argocd_alb_ingress_certificate_arn          = ""
-  aws_argocd_alb_ingress_load_balancer_attributes = "idle_timeout.timeout_seconds=600"
-  aws_argocd_alb_ingress_scheme                   = "internet-facing"
-  aws_argocd_alb_ingress_target_type              = "instance"
+# ### ArgoCD
+create_argocd = false
+helm_release_argocd_parameter = {
+  helm_repo_name    = "argocd"
+  helm_repo_version = "8.0.13"
 }
-
-create_argocd_ingress_nginx_controller = true
+argocd_custom_domain = ""
 helm_release_argocd_ingress_nginx_parameter = {
   helm_repo_name      = "ingress-nginx"
   helm_repo_version   = "4.12.2"
-  helm_repo_namespace = "argocd"
+  helm_repo_namespace = "nginx"
 }
+argocd_alb_ingress_parameter = {
+  argocd_alb_ingress_namespace                = "nginx"
+  argocd_alb_ingress_healthcheck_path         = "/healthz"
+  argocd_alb_ingress_load_balancer_attributes = "idle_timeout.timeout_seconds=600"
+  argocd_alb_ingress_scheme                   = "internet-facing"
+  argocd_alb_ingress_ssl_policy               = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  argocd_alb_ingress_success_codes            = "200"
+  argocd_alb_ingress_target_type              = "instance"
+  argocd_alb_ingress_certificate_arn          = ""
+}
+
+argocd_elb_waf_name                              = "argocd-elb-waf-acl"
+argocd_elb_waf_default_action                    = "allow"
+argocd_elb_waf_whitelist_ip_cidr                 = []
+argocd_elb_waf_blocklist_ip_cidr                 = []
+argocd_elb_waf_acl_resource_arn                  = []
+argocd_elb_waf_acl_enabled_logging_configuration = true # cloudwatch
+argocd_elb_waf_acl_visibility_config = {
+  cloudwatch_metrics_enabled = true
+  sampled_requests_enabled   = true
+}
+argocd_elb_waf_acl_log_destination_configs_arn = "" # Set this as an empty string so it will create cloudwatch group automatically
+

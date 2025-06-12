@@ -5,8 +5,7 @@ stages:
   - apply
   - destroy
 
-
 include:
-  - project: 'jcheng-tech-919/cicd-templates'
-    file: 'templates/terraform-provision.gitlab-ci.yml'
+  - project: "jcheng-tech-919/cicd-templates"
+    file: "templates/terraform-provision.gitlab-ci.yml"
     ref: main
