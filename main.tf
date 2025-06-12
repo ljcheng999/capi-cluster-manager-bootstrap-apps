@@ -8,9 +8,8 @@ provider "aws" {
 
 
 module "capi_cluster_manager_bootstrap_app" {
-  source = "../../modules/terraform-aws-capi-cluster-manager-bootstrap-apps"
-  # source  = "ljcheng999/capi-cluster-manager-bootstrap-apps/aws"
-  # version = "1.0.4"
+  source  = "ljcheng999/capi-cluster-manager-bootstrap-apps/aws"
+  version = "1.0.5"
 
   create       = var.create
   cluster_name = var.cluster_name
