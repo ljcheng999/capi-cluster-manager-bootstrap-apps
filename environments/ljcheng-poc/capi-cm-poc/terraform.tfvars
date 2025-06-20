@@ -9,7 +9,7 @@ vpc_public_subnets_name_prefix = "upstream_vpc-public"
 
 
 ### AWS ELB
-create_aws_elb_controller = false
+create_aws_elb_controller = true
 helm_release_aws_elb_controller_parameter = {
   helm_repo_chart     = "aws-load-balancer-controller"
   helm_repo_version   = "1.13.2"
@@ -17,15 +17,15 @@ helm_release_aws_elb_controller_parameter = {
 }
 
 ### External Secrets
-create_external_secrets = false
+create_external_secrets = true
 helm_release_external_secrets_parameter = {
   helm_repo_chart   = "external-secrets"
   helm_repo_version = "0.16.2"
 }
 
 ### Metrics SErvice
-create_metrics_server_controller = false
-helm_release_metrics_server_controller_parameter = {
+create_metrics_server = true
+helm_release_metrics_server_parameter = {
   helm_repo_chart   = "metrics-server"
   helm_repo_version = "3.12.2"
 }
@@ -42,9 +42,12 @@ helm_release_velero_parameter = {
   cloud_bucket_prefix      = "capi-cm-poc"
 }
 
-
+################################################################
 # ### ArgoCD
-create_argocd = false
+### Note: there are dependencies that are driven by external secret
+### Note: If you would like AWS ELB working with ArgoCD, make create_aws_elb_controller = true
+################################################################
+create_argocd = true
 helm_release_argocd_parameter = {
   helm_repo_name    = "argocd"
   helm_repo_version = "8.0.13"
@@ -78,3 +81,8 @@ argocd_elb_waf_acl_visibility_config = {
 }
 argocd_elb_waf_acl_log_destination_configs_arn = "" # Set this as an empty string so it will create cloudwatch group automatically
 
+argocd_upstream_project_role = "cluster-manager"
+argocd_upstream_application_config = {
+  version_path  = "capi-v5"
+  ext_var_value = "ljc"
+}

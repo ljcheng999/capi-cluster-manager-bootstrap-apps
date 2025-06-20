@@ -43,6 +43,11 @@ variable "addition_tags" {
   type    = map(any)
   default = {}
 }
+
+variable "tags" {
+  type    = map(any)
+  default = {}
+}
 # variable "tags" {
 #   description = "Company required tags - used for billing metadata and cloud-related monitoring, automation"
 
@@ -69,11 +74,6 @@ variable "addition_tags" {
 #     error_message = "All `var.tags` must be defined: \"group\", \"team\", \"stack\", \"email\", \"application\", \"automation_tool\", \"automation_path\""
 #   }
 # }
-
-variable "public_subnet_ids" {
-  type    = list(any)
-  default = []
-}
 
 variable "create" {
   description = "Controls if resources should be created (affects nearly all resources)"
@@ -157,12 +157,12 @@ variable "helm_release_external_secrets_parameter" {
 ### Metrics Server
 ################################################################################
 
-variable "create_metrics_server_controller" {
+variable "create_metrics_server" {
   type    = bool
   default = false
 }
 
-variable "helm_release_metrics_server_controller_parameter" {
+variable "helm_release_metrics_server_parameter" {
   type    = map(any)
   default = {}
 }
@@ -232,7 +232,6 @@ variable "argocd_alb_ingress_parameter" {
 #   default     = ""
 # }
 
-
 variable "argocd_elb_waf_name" {
   default = ""
 }
@@ -265,6 +264,14 @@ variable "argocd_elb_waf_acl_log_destination_configs_arn" {
   type    = string
   default = ""
 }
+
+variable "argocd_upstream_project_role" {
+  default = "cluster-manager"
+}
+variable "argocd_upstream_application_config" {
+  default = {}
+}
+
 
 variable "argocd_elb_waf_rules" {
   default = [

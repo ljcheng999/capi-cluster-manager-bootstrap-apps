@@ -8,14 +8,14 @@ provider "aws" {
 
 
 module "capi_cluster_manager_bootstrap_app" {
+  # source = "../../modules/terraform-aws-capi-cluster-manager-bootstrap-apps"
   source  = "ljcheng999/capi-cluster-manager-bootstrap-apps/aws"
-  version = "1.0.5"
+  version = "1.0.9"
 
   create       = var.create
   cluster_name = var.cluster_name
   vpc_prefix   = var.vpc_prefix
 
-  # public_subnet_ids              = local.public_subnet_ids
   custom_domain                  = var.custom_domain
   vpc_public_subnets_name_prefix = var.vpc_public_subnets_name_prefix
 
@@ -28,8 +28,8 @@ module "capi_cluster_manager_bootstrap_app" {
   helm_release_external_secrets_parameter = var.helm_release_external_secrets_parameter
 
   ### Metrics Server
-  create_metrics_server_controller                 = var.create_metrics_server_controller
-  helm_release_metrics_server_controller_parameter = var.helm_release_metrics_server_controller_parameter
+  create_metrics_server                 = var.create_metrics_server
+  helm_release_metrics_server_parameter = var.helm_release_metrics_server_parameter
 
   ### Velero
   create_velero_controller      = var.create_velero_controller
@@ -53,7 +53,8 @@ module "capi_cluster_manager_bootstrap_app" {
   argocd_elb_waf_acl_enabled_logging_configuration = var.argocd_elb_waf_acl_enabled_logging_configuration
   argocd_elb_waf_acl_log_destination_configs_arn   = var.argocd_elb_waf_acl_log_destination_configs_arn
 
-
+  argocd_upstream_project_role       = var.argocd_upstream_project_role
+  argocd_upstream_application_config = var.argocd_upstream_application_config
 
   tags = merge(
     local.tags,
@@ -61,11 +62,6 @@ module "capi_cluster_manager_bootstrap_app" {
   )
 }
 
-
-# output "capi_cluster_manager_bootstrap_app" {
-#   value     = module.capi_cluster_manager_bootstrap_app
-#   sensitive = true
-# }
 
 
 
