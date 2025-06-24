@@ -63,7 +63,7 @@ argocd_alb_ingress_parameter = {
   argocd_alb_ingress_healthcheck_path         = "/healthz"
   argocd_alb_ingress_load_balancer_attributes = "idle_timeout.timeout_seconds=600"
   argocd_alb_ingress_scheme                   = "internet-facing"
-  argocd_alb_ingress_ssl_policy               = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  argocd_alb_ingress_ssl_policy               = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
   argocd_alb_ingress_success_codes            = "200"
   argocd_alb_ingress_target_type              = "instance"
   argocd_alb_ingress_certificate_arn          = ""
