@@ -81,8 +81,25 @@ argocd_elb_waf_acl_visibility_config = {
 }
 argocd_elb_waf_acl_log_destination_configs_arn = "" # Set this as an empty string so it will create cloudwatch group automatically
 
-argocd_upstream_project_role = "cluster-manager"
+
 argocd_upstream_application_config = {
-  version_path  = "capi-v5"
+  version_path  = "capi-upstream/kube-cm/capi-v5"
   ext_var_value = "ljc"
+}
+
+argocd_upstream_projects_roles = [
+  {
+    name = "cluster-manager"
+  },
+  {
+    name = "aws-022985595394-downstream"
+  }
+]
+
+
+# This is being used for read the downstream repos as argocd template from AWS secrets manager
+argocd_repo_creds = {
+  manifest_name = "downstream-cluster-catalogs-es"
+  # the secret should contain, url, type, password, name, project for key and value
+  secrets_manager_path = "cluster-manager/capi-cm-poc/gitlab/capi/cluster-catalogs"
 }

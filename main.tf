@@ -8,9 +8,9 @@ provider "aws" {
 
 
 module "capi_cluster_manager_bootstrap_app" {
-  # source = "../../modules/terraform-aws-capi-cluster-manager-bootstrap-apps"
-  source  = "ljcheng999/capi-cluster-manager-bootstrap-apps/aws"
-  version = "1.0.9"
+  source = "../../modules/terraform-aws-capi-cluster-manager-bootstrap-apps"
+  # source  = "ljcheng999/capi-cluster-manager-bootstrap-apps/aws"
+  # version = "1.0.11"
 
   create       = var.create
   cluster_name = var.cluster_name
@@ -53,8 +53,10 @@ module "capi_cluster_manager_bootstrap_app" {
   argocd_elb_waf_acl_enabled_logging_configuration = var.argocd_elb_waf_acl_enabled_logging_configuration
   argocd_elb_waf_acl_log_destination_configs_arn   = var.argocd_elb_waf_acl_log_destination_configs_arn
 
-  argocd_upstream_project_role       = var.argocd_upstream_project_role
+  argocd_upstream_projects_roles     = var.argocd_upstream_projects_roles
   argocd_upstream_application_config = var.argocd_upstream_application_config
+
+  argocd_repo_creds = var.argocd_repo_creds
 
   tags = merge(
     local.tags,

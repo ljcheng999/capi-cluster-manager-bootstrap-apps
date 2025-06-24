@@ -265,9 +265,14 @@ variable "argocd_elb_waf_acl_log_destination_configs_arn" {
   default = ""
 }
 
-variable "argocd_upstream_project_role" {
-  default = "cluster-manager"
+variable "argocd_upstream_projects_roles" {
+  default = []
 }
+
+variable "argocd_repo_creds" {
+  default = {}
+}
+
 variable "argocd_upstream_application_config" {
   default = {}
 }
